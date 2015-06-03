@@ -100,6 +100,9 @@ func GVQuery(cve string) (ret GVCVE, err error) {
 	args := make([]string, 0)
 	args = append(args, "get_cve", cve)
 	lns, err := vfRunner(args)
+	if err != nil {
+		return ret, err
+	}
 	for _, x := range lns {
 		tok, buf, err := lineParser(x)
 		if err != nil {
@@ -118,6 +121,9 @@ func GVQuery(cve string) (ret GVCVE, err error) {
 	args = make([]string, 0)
 	args = append(args, "get_cvss", cve)
 	lns, err = vfRunner(args)
+	if err != nil {
+		return ret, err
+	}
 	for _, x := range lns {
 		tok, buf, err := lineParser(x)
 		if err != nil {
