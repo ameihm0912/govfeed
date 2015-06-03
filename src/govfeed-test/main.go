@@ -26,7 +26,17 @@ func main() {
 	}
 	path := os.Args[1]
 
-	err := govfeed.GVInit(path)
+	// Try calling without initializing first, make sure we get an
+	// error.
+	_, err := govfeed.GVQuery(testcve)
+	if err == nil {
+		fmt.Fprintf(os.Stderr, "error: query should have failed but did not\n")
+		os.Exit(1)
+	} else {
+		fmt.Fprintf(os.Stdout, "uninitialized query failed properly, %v\n", err)
+	}
+
+	err = govfeed.GVInit(path)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)

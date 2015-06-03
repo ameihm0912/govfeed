@@ -8,6 +8,7 @@
 package govfeed
 
 import (
+	"errors"
 	"os"
 	"os/exec"
 	"regexp"
@@ -91,6 +92,10 @@ func processLine(tok int, buf string, cve *GVCVE) error {
 
 func GVQuery(cve string) (ret GVCVE, err error) {
 	ret.CVEID = cve
+
+	if !ctx.initialized {
+		return ret, errors.New("call GVInit() first")
+	}
 
 	args := make([]string, 0)
 	args = append(args, "get_cve", cve)
