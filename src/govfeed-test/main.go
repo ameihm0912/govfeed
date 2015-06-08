@@ -41,6 +41,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
+	fmt.Fprintf(os.Stdout, "Trying valid query\n")
 	ret, err := govfeed.GVQuery(testcve)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
@@ -49,4 +50,17 @@ func main() {
 	fmt.Fprintf(os.Stdout, "CVE: %v\n", ret.CVEID)
 	fmt.Fprintf(os.Stdout, "Description: %v\n", ret.Description)
 	fmt.Fprintf(os.Stdout, "CVSS: %v\n", ret.CVSS)
+
+	fmt.Fprintf(os.Stdout, "Trying invalid query\n")
+	ret, err = govfeed.GVQuery("INVALID")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		os.Exit(1)
+	}
+	fmt.Fprintf(os.Stdout, "CVE: %v\n", ret.CVEID)
+	if len(ret.Description) == 0 {
+		fmt.Fprintf(os.Stdout, "Description correctly zero length\n")
+	} else {
+		fmt.Fprintf(os.Stdout, "Description should have been empty but was not, %v\n", ret.Description)
+	}
 }
